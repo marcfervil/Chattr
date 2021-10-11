@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "chatr",
+    "slug": "chatr",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "chatr"
+}
