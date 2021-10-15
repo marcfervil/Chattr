@@ -18,8 +18,8 @@ import {
 class Login extends Component {
 
 	state = {
-		username: "",
-		password: "",
+		username: "Marc",
+		password: "123123",
 		invalidLogin: false
 	}
 
@@ -27,15 +27,20 @@ class Login extends Component {
 		return this.props.route.params.network;
 	}
   
-	onPress = async () => {
-		
+	login = async () => {
 		let loginResult = await this.getNetwork().login(this.state.username, this.state.password);
 		
 		if(loginResult.error){
 			this.setState({invalidLogin: true});
+			
 		}else{
+			if(!this.state.invalidLogin)this.setState({invalidLogin: false});
 			this.getNetwork().userId = loginResult.id;
+
+			this.props.navigation.navigate('Record', { network: this.getNetwork() });
+			//this.props.navigation.popToTop();
 		}
+		
 	}
 
 	username = (event)=>{
@@ -56,7 +61,7 @@ class Login extends Component {
 	   			}
 				<TextInput style={styles.input} placeholder="username" value={this.state.username} onChange={this.username}/>
 				<TextInput style={styles.input} placeholder="password" value={this.state.password} onChange={this.password}/>
-				<TouchableOpacity style={styles.button} onPress={this.onPress} >
+				<TouchableOpacity style={styles.button} onPress={this.login} >
 					<Text>Login</Text>
 				</TouchableOpacity>
 				

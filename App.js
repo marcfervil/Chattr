@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, Button, Animated } from 'react-native';
 import Login from "./Login";
+import Record from "./Record";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Network from "./network";
@@ -23,10 +24,10 @@ export default function App() {
 					options={{ title: 'Welcome' }}
 				/>
 				<Stack.Screen
-					name="Login2"
-					component={Login}
+					name="Record"
+					component={Record}
 					initialParams={{network}}
-					options={{ title: 'Welcome' }}
+					options={{ title: 'Record' }}
 				/>
 
 			</Stack.Navigator>
