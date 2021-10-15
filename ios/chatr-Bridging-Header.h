@@ -4,11 +4,13 @@
 
 #import <React/RCTBridgeModule.h>
 #import <React/RCTViewManager.h>
+#import <React/RCTEventEmitter.h>
 #import <React/RCTLog.h>
 
 
 @interface RCT_EXTERN_MODULE(AudioStream, NSObject)
-RCT_EXTERN_METHOD(stream:(NSDictionary *)options)
+RCT_EXTERN_METHOD(stream:(RCTResponseSenderBlock *)error)
+RCT_EXTERN_METHOD(stop)
 @end
 
 /*

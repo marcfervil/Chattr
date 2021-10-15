@@ -26,15 +26,16 @@ class Record extends Component {
 
 	record =  () => {
 		//console.log(NativeModules.AudioStream.stream)
-		AudioStream.stream({message:"SO MUCH TIME WASTED"})
+	
 		this.setState({recording: !this.state.recording});
 		if(!this.state.recording){
 			console.log("recording")
-		
+			AudioStream.stream((data)=>{
+				console.log("ooh", data)
+			})
 		}else{
-			console.log("not recording")
-
-			
+			console.log("stopped recording")
+			AudioStream.stop()
 		}
 
 		
