@@ -13,6 +13,7 @@ import AVFoundation
 class AudioStream: RCTEventEmitter {
   
   static let audioEngine = AVAudioEngine()
+  let playerNode = AVAudioPlayerNode()
   
   @objc
   override static func requiresMainQueueSetup() -> Bool {
@@ -29,27 +30,110 @@ class AudioStream: RCTEventEmitter {
     let base64String = data.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
     return base64String
   }
+  var unlocked : Bool = false
   
   //_ options: NSDictionary
   @objc func stream( _ error: @escaping RCTResponseSenderBlock) -> Void {
 
-    let inputNode = AudioStream.audioEngine.inputNode
+    let inputNode = chatr.AudioStream.audioEngine.inputNode
     let bus = 0
+   
+    
     inputNode.installTap(onBus: bus, bufferSize: 2048, format: inputNode.inputFormat(forBus: bus)) {
       (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-      //callback([self.pcmToBase(buffer: buffer)])
-      self.sendEvent(withName: "stream", body: self.pcmToBase(buffer: buffer))
+ 
+      /*
+      let nsBuffer : NSMutableArray = NSMutableArray()
+      for i in 0..<2048 {
+        nsBuffer.add(NSNumber(value: (buffer.floatChannelData?.pointee[i])!))
+      }
+      self.sendEvent(withName: "stream", body: nsBuffer)*/
+      if self.unlocked{
+        self.playFromNetwork(audio: buffer)
+      }
+     
+      //
     }
+    let engine = AudioStream.audioEngine
+    engine.attach(playerNode)
+    
+    engine.connect(playerNode, to: engine.mainMixerNode, format: AudioStream.audioEngine.inputNode.outputFormat(forBus: 0))
     
     AudioStream.audioEngine.prepare()
+   // play()
     try! AudioStream.audioEngine.start()
+  
+    playerNode.play()
+    self.unlocked = true
+    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+     // print("play")
+     // self.play()
+    }
     
   }
   
+  func convertInt16ToFloat32(_ data: [Float32]) -> AVAudioPCMBuffer {
+   
+    let audioBuffer = AVAudioPCMBuffer(pcmFormat: AudioStream.audioEngine.inputNode.outputFormat(forBus: 0), frameCapacity: 2048)!
+    
+    // Each real data of the array input is reduced to the interval [-1, 1]
+    for i in 0..<data.count {
+    
+      audioBuffer.floatChannelData?.pointee[i] = data[i]
+    }
+    
+    audioBuffer.frameLength = audioBuffer.frameCapacity
+    return audioBuffer
+  }
+  
+ 
+  
+  @objc func playFromNetwork(_ data: NSArray) {
+    // data: linear data PCM-Int16, sample rate 8000, 160 bytes
+    var items = [Float32]()
+    // playback converted data on AVAudioPlayerNode
+    for item in data{
+      items.append(item as! Float32)
+    }
+  
+    let audio = convertInt16ToFloat32(items)
+    self.playerNode.scheduleBuffer(audio, completionHandler: {
+
+    })
+
+  }
+  
+  @objc func playFromNetwork( audio: AVAudioPCMBuffer) {
+   
+   // let audio = convertInt16ToFloat32(items)
+   // print("tryna play")
+    self.playerNode.scheduleBuffer(audio, completionHandler: {
+      //print("played yourself")
+    })
+    
+  }
+  
+  @objc func play(){
+
+    let engine = AudioStream.audioEngine
+     // AVAudioEngine()
+      //AudioStream.audioEngine
+      
+      
+      engine.attach(playerNode)
+
+    engine.connect(playerNode, to: engine.mainMixerNode, format: AudioStream.audioEngine.inputNode.outputFormat(forBus: 0))
+    
+      playerNode.play()
+    self.unlocked = true
+  }
+  
+  //@objc func play( _ error: @escaping RCTResponseSenderBlock) -> Void {
+  
   @objc func stop(){
-     AudioStream.audioEngine.inputNode.removeTap(onBus: 0)
+    // AudioStream.audioEngine.inputNode.removeTap(onBus: 0)
     AudioStream.audioEngine.stop()
-    self.stopObserving()
+    //self.stopObserving()
   }
   
 }

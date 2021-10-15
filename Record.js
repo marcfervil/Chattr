@@ -13,7 +13,7 @@ import {
 	NativeModules,
 	Animated,
   } from 'react-native';
-
+  import { Buffer } from 'buffer';
   import AudioStream from './AudioStream';
 
 
@@ -23,19 +23,39 @@ class Record extends Component {
 	state = {
 		recording: false
 	}
+	chunks=[]
 
 	record =  () => {
 		//console.log(NativeModules.AudioStream.stream)
 	
 		this.setState({recording: !this.state.recording});
 		if(!this.state.recording){
-			console.log("recording")
+			
+			//let ff= "few"
+			//console.log("recording")
 			AudioStream.stream((data)=>{
-				console.log("ooh", data)
+				//console.log(ff);
+				//chunk = Buffer.from(data, 'base64');
+				/*
+				this.chunks.push(data)
+				if(this.chunks.length==500){
+					AudioStream.play();
+					AudioStream.stop(); 
+					
+					for(let chunk of this.chunks){
+						AudioStream.AudioStream.playFromNetwork(chunk);
+					}
+					
+				}*/
 			})
 		}else{
 			console.log("stopped recording")
-			AudioStream.stop()
+			//AudioStream.stop()
+			AudioStream.stop();
+					AudioStream.play();
+					for(let chunk of this.chunks){
+						AudioStream.AudioStream.playFromNetwork(chunk);
+					}
 		}
 
 		

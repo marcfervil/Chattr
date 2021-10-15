@@ -11,6 +11,8 @@
 @interface RCT_EXTERN_MODULE(AudioStream, NSObject)
 RCT_EXTERN_METHOD(stream:(RCTResponseSenderBlock *)error)
 RCT_EXTERN_METHOD(stop)
+RCT_EXTERN_METHOD(play)
+RCT_EXTERN_METHOD(playFromNetwork:(NSArray *)data)
 @end
 
 /*

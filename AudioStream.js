@@ -10,6 +10,13 @@ module.exports = {
 	stop(){
 		AudioStream.stop()
 	},
+	AudioStream,
+	play(){
+		AudioStream.play()
+	},
+	playFromNetwork(){
+		AudioStream.playFromNetwork()
+	},
     stream(callback)
     {
         this.emitter.addListener(
