@@ -30,7 +30,7 @@ class Record extends Component {
 	
 		this.setState({recording: !this.state.recording});
 		if(!this.state.recording){
-			
+			this.chunks = []
 			//let ff= "few"
 			//console.log("recording")
 			AudioStream.stream((data)=>{
@@ -47,15 +47,16 @@ class Record extends Component {
 					}
 					
 				}*/
+				this.chunks.push(data)
+				
 			})
 		}else{
 			console.log("stopped recording")
-			//AudioStream.stop()
-			AudioStream.stop();
-					AudioStream.play();
-					for(let chunk of this.chunks){
-						AudioStream.AudioStream.playFromNetwork(chunk);
-					}
+			AudioStream.stop()
+			AudioStream.AudioStream.playFromNetwork(this.chunks);
+			this.chunks = []
+			//
+		
 		}
 
 		
