@@ -48,7 +48,7 @@ class Login extends Component {
 	}
 	password = (event)=>{
 		this.setState({password: event.nativeEvent.text});
-	}
+	} 
 
    	render() {
 		return (

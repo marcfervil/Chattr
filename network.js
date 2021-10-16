@@ -1,11 +1,12 @@
+import { Alert } from "react-native";
 
 
 class Network {
 	url = "http://localhost:8000";
 	userId = null;
 
-	async request(endpoint, data){
-
+	async request(endpoint, data={}){
+		if(this.userId)data["auth"] = this.userId
 		let result = await fetch(`${this.url}/${endpoint}`, {
 			method: 'POST',
 			headers: {
@@ -14,8 +15,10 @@ class Network {
 			},
 			body: JSON.stringify(data)
 		});
+		console.log(data)
 	
 		result = await result.json();
+		if(result.error && endpoint!="login")Alert.alert(result.error)
 		return result;
 	}
 

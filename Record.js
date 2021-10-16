@@ -24,8 +24,12 @@ class Record extends Component {
 		recording: false
 	}
 	chunks=[]
+	
+	getNetwork = () => {
+		return this.props.route.params.network;
+	}
 
-	record =  () => {
+	record =  async () => {
 		//console.log(NativeModules.AudioStream.stream)
 	
 		this.setState({recording: !this.state.recording});
@@ -33,16 +37,18 @@ class Record extends Component {
 			this.chunks = []
 			//let ff= "few"
 			//console.log("recording")
-
+			let res = await this.getNetwork().request("me" )
+			Alert.alert(JSON.stringify(res));
+			/*
 			AudioStream.stream((data)=>{
 
 				this.chunks.push(data)
 				
-			})
+			})*/
 		}else{
 			console.log("stopped recording")
-			AudioStream.stop()
-			AudioStream.AudioStream.playFromNetwork(this.chunks);
+			//AudioStream.stop()
+			//AudioStream.AudioStream.playFromNetwork(this.chunks);
 			this.chunks = []
 			//
 		
@@ -51,43 +57,24 @@ class Record extends Component {
 		
 	}
 
+	username = (event)=>{
+		this.setState({username: event.nativeEvent.text});
+	}
+
 	render() {
 		return (
 			<View style={styles.container}>
-				<TouchableOpacity  style={styles.button} onPress={this.record} >
+				<TextInput style={styles.input} placeholder="username" value={this.state.username} onChange={this.username}/>
+				<TouchableOpacity style={styles.button} onPress={this.record} >
 					<Text>Record</Text>
 				</TouchableOpacity>
 			</View>
 		);
 	}
 
-	/*
-	turnOn = () => {
-		NativeModules.Bulb.turnOn({"message":"hi"});
-	  }
-	render() {
-	 return (
-		<View style={styles.container}>
-		 <Text style={styles.welcome}>Welcome to Light App!!</Text>
-		 <Button
-			onPress={this.turnOn}
-		   title="Turn ON "
-		   color="#FF6347" />
-		 </View>
-	 );
-	}*/
 
 }
 
-/*
-const styles = StyleSheet.create({
-	container: {
-	flex: 1,
-	justifyContent: 'center',
-	alignItems: 'center',
-	backgroundColor: '#F5FCFF',
-	},
-	});*/
   
 
 const styles = StyleSheet.create({

@@ -1,8 +1,10 @@
 const express = require('express');
 const { MongoClient } = require("mongodb");
+
 const app = express();
 const port = 8000;
 app.use(express.json())
+
 
 var client = null;
 var db = null;
@@ -18,7 +20,30 @@ async function init(){
 //	await collection.insertOne({"username": "Marc", "password": "123123"});
 }
 
+var validator = async function (req, res, next) {
+	if(req.url!="/login"){
+		let auth = {id: req.body.auth}
+		let collection = db.collection('users');
+		let user = await collection.findOne(auth);
+		if(user){
+			req.user = user
+			next()
+		}else{
+			res.send({"error": "Invalid credentials"})
+		}
+	}else{
+		next()
+	}
+}
+  
+app.use(validator)
+
+
 init();
+
+app.post('/me', (req, res) => {
+	res.send({msg:"hi"})
+});
 
 app.get('/', (req, res) => {
 	res.send('Hello World!')
@@ -35,10 +60,13 @@ function getId(length) {
    return result;
 }
 
+
+
+
 app.post('/login', async (req, res) => {
 	
 	let collection = db.collection('users');
-	let id = getId(10);
+	let id = getId(20);
 	let auth = {
 		username: req.body.username,
 		password: req.body.password
