@@ -33,20 +33,9 @@ class Record extends Component {
 			this.chunks = []
 			//let ff= "few"
 			//console.log("recording")
+
 			AudioStream.stream((data)=>{
-				//console.log(ff);
-				//chunk = Buffer.from(data, 'base64');
-				/*
-				this.chunks.push(data)
-				if(this.chunks.length==500){
-					AudioStream.play();
-					AudioStream.stop(); 
-					
-					for(let chunk of this.chunks){
-						AudioStream.AudioStream.playFromNetwork(chunk);
-					}
-					
-				}*/
+
 				this.chunks.push(data)
 				
 			})

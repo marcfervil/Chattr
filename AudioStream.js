@@ -9,6 +9,7 @@ module.exports = {
     emitter: new NativeEventEmitter(AudioStream),
 	stop(){
 		AudioStream.stop()
+		this.emitter.removeAllListeners("stream")
 	},
 	AudioStream,
 	play(){

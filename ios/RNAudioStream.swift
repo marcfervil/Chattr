@@ -31,32 +31,24 @@ class AudioStream: RCTEventEmitter {
     return base64String
   }
   var unlocked : Bool = false
-  
+  var first = true
   //_ options: NSDictionary
   @objc func stream( _ error: @escaping RCTResponseSenderBlock) -> Void {
     
    
-    playerNode.stop()
-    //playerNode.reset()
-    chatr.AudioStream.audioEngine.stop()
- // chatr.AudioStream.audioEngine.reset()
-   // AudioStream.audioEngine.
     
-    print(AudioStream.audioEngine.mainMixerNode.numberOfOutputs, AudioStream.audioEngine.mainMixerNode.numberOfInputs)
-    /*
-    if AudioStream.audioEngine.mainMixerNode.numberOfOutputs > 0{
-      AudioStream.audioEngine.disconnectNodeInput(playerNode)
-    }*/
+    AudioStream.audioEngine.reset()
+    playerNode.reset()
     
-    AudioStream.audioEngine.detach(playerNode)
-    
-    AudioStream.audioEngine.inputNode.removeTap(onBus: 0)
-    AudioStream.audioEngine.outputNode.removeTap(onBus: 0)
+   // AudioStream.audioEngine.detach(playerNode)
    
-    AudioStream.audioEngine = AVAudioEngine()
-    playerNode = AVAudioPlayerNode()
+    //playerNode.stop()
+    AudioStream.audioEngine.stop()
     
+   AudioStream.audioEngine = AVAudioEngine()
+   playerNode = AVAudioPlayerNode()
     
+  
     let engine = AudioStream.audioEngine
     
     let inputNode = engine.inputNode
@@ -73,7 +65,7 @@ class AudioStream: RCTEventEmitter {
         nsBuffer.add(buffer.floatChannelData!.pointee[i])
       }
       self.sendEvent(withName: "stream", body: nsBuffer)
-     
+       
       // self.playFromNetwork(audio: buffer)
         
         
@@ -85,21 +77,34 @@ class AudioStream: RCTEventEmitter {
       //
     }
  
-   // DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [self] in
+   //
+    
+    if #available(iOS 13.0, *) {
+      print(" ")
+      print(" ")
+      print(engine.attachedNodes)
+      print(" ")
+      print(" ")
+    } else {
+      // Fallback on earlier versions
+    }
+   // if first{
       engine.attach(playerNode)
       
-      
+    
       engine.connect(playerNode, to: engine.mainMixerNode, format: AudioStream.audioEngine.inputNode.outputFormat(forBus: 0))
       
+    
       AudioStream.audioEngine.prepare()
-      // play()
+    
       try! AudioStream.audioEngine.start()
-      
+      first = false
+  //  }
       
       self.unlocked = true
-      
+      print("recording")
   //  }
-   
+    
     
   }
   
@@ -145,7 +150,11 @@ class AudioStream: RCTEventEmitter {
         //pcmBufferData.append(bit as! Float32)
       }
       let audio = createPCMBuffer(bits, 1)
-      self.playerNode.scheduleBuffer(audio, completionHandler: nil);
+      let last = chunk as! NSArray != data.lastObject as! NSArray
+      self.playerNode.scheduleBuffer(audio, completionHandler: last ? nil : { [self] in
+        //playerNode.stop()
+        playerNode.reset()
+      });
     }
     
     /*
@@ -199,7 +208,13 @@ class AudioStream: RCTEventEmitter {
   @objc func stop(){
     self.unlocked = false
     self.stopObserving()
-   
+
+    
+    AudioStream.audioEngine.inputNode.removeTap(onBus: 0)
+    AudioStream.audioEngine.outputNode.removeTap(onBus: 0)
+    
+    AudioStream.audioEngine.inputNode.reset()
+    AudioStream.audioEngine.outputNode.reset()
     //AudioStream.audioEngine.pause()
    
   
