@@ -74,7 +74,7 @@ class Record extends Component {
 			<View style={styles.container}>
 				<TouchableOpacity style={styles.button} onPress={this.play} >
 					<Text>Play</Text>
-				</TouchableOpacity>
+				 </TouchableOpacity>
 
 				<TouchableOpacity style={styles.button} onPress={this.send} >
 					<Text>Send</Text>

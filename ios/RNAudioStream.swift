@@ -61,6 +61,7 @@ class AudioStream: RCTEventEmitter {
       
       let nsBuffer : NSMutableArray = NSMutableArray()
         for i in 0..<Int(buffer.frameCapacity) {
+        
        // nsBuffer.add(NSNumber(value: (buffer.floatChannelData?.pointee[i])!))
         nsBuffer.add(buffer.floatChannelData!.pointee[i])
       }

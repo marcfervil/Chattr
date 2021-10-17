@@ -45,12 +45,9 @@ class Home extends Component {
 
 	openConvo = async (friend) => {
 		let convo = await this.getNetwork().convo(friend)
-		console.log(convo);
-		//if(convo.msgs.length > 0){
-			this.props.navigation.navigate('Convo', { network: this.getNetwork(), friend, convo });
-		//}else{
-		//	Alert.alert("You haven't started a convo with this user!")
-		//}
+
+		this.props.navigation.navigate('Convo', { network: this.getNetwork(), friend, convo });
+	
 	}
 
 	Conversations = (props)=>{

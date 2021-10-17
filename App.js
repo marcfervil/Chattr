@@ -15,6 +15,7 @@ const network = new Network();
 
 export default function App() {
 	//Stack.Navigator.nav
+
     return (
 		<NavigationContainer>
 			<Stack.Navigator>

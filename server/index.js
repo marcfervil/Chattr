@@ -88,31 +88,26 @@ app.post('/play', async (req, res) => {
 			let frames = []
 			let frame = []
 			bucket.openDownloadStreamByName(msg.fileName).pipe(new audioStreamReader((chunk)=>{
-				//let cc = new DataView(chunk).getFloat32(1)
-				//console.log(Buffer.from([-6,9]).readFloatLE(0))
-				console.log(chunk.length,chunk.byteLength)
-				for(let i=0; i <chunk.length/4; i++){
-					
-					
+
+				for(let i=0; i <chunk.length ; i+=4){
+
 					frame.push(chunk.readFloatBE(i))
-					if(frame.length == 4100){
-						console.log("framed")
+					if(frame.length == 4410){
 						frames.push(frame)
 						frame = []
-						if(frames.length==12){
-							res.send({"frames":frames})
-						}
+						
 					}
 					
 				}
 
 				//readFloatBE
 				//console.log("chunk", cc)
-			})).on("error",(e)=>{
+			}).on("error",(e)=>{
 				console.log("error", e)
 			}).on("finish",()=>{
+				res.send({"frames":frames})
 				console.log("done")
-			});
+			}))
 			//res.send({"e":"e"});
 		}else{
 			res.send({"error": "You don't have permission to open this Chattr!"})
@@ -172,24 +167,16 @@ app.listen(port, () => {
 //UTIL
 function audioStreamWriter(audioChunks){
 	async function * generate() {
-	
 		for(chunk of audioChunks){
-			/*
-			for(float32 of chunk){
-				yield float32;
-			}*/
-			let floatChunk = Buffer.alloc(4410 * 32)
+			let floatChunk = Buffer.alloc(4410 * 4)
 			let num = 0
-			for(float32 of chunk){
 		
+			for(float32 of chunk){
 				floatChunk.writeFloatBE(float32,num)
-				num += 1;
+				num += 4;
 			}
-
-			//console.log(floatChunk.readFloatBE(0))
 			yield floatChunk;
 		}
-		//console.log("completed")
 	}
 	let stream = Readable.from(generate())
 	
@@ -203,9 +190,13 @@ class audioStreamReader extends Writable {
 		
 	}
   
-	_write(chunk, encoding, callback) {
+	_write(chunk, encoding, next) {
+		//super._write(chunk, encoding, callback)
 	  this.writeCb(chunk);
+	  next()
 	}
+
+	_
   }
 
 
