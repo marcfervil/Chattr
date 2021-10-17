@@ -72,12 +72,13 @@ app.post('/login', async (req, res) => {
 	let user = await collection.findOne(auth);
 	if(user){
 		await collection.findOneAndUpdate(auth, {"$set": {id}});
-		res.send({id, freinds:user.friends});
+		res.send({id, friends:user.friends});
 	}else{
 		res.send({"error": "Invalid credentials"})
 	}
 
 });
+
 
 
 app.post('/chattr', async (req, res) => {

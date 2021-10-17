@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Button, Animated } from 'react-native';
 import Login from "./Login";
 import Record from "./Record";
+import Home from "./Home";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Network from "./network";
@@ -21,7 +22,18 @@ export default function App() {
 					name="Login"
 					component={Login}
 					initialParams={{network}}
+					
 					options={{ title: 'Welcome' }}
+				/>
+				<Stack.Screen
+				
+					name="Home"
+					component={Home}
+					initialParams={{network}}
+					options={{ title: 'Home' , headerStyle: {
+						backgroundColor: global.getNextColor()
+					 }}}
+					
 				/>
 				<Stack.Screen
 					name="Record"

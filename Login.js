@@ -36,8 +36,8 @@ class Login extends Component {
 		}else{
 			if(!this.state.invalidLogin)this.setState({invalidLogin: false});
 			this.getNetwork().userId = loginResult.id;
-
-			this.props.navigation.navigate('Record', { network: this.getNetwork() });
+			this.getNetwork().userData = loginResult;
+			this.props.navigation.navigate('Home', { network: this.getNetwork() });
 			//this.props.navigation.popToTop();
 		}
 		
