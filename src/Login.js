@@ -11,9 +11,7 @@ import {
 	Animated,
   } from 'react-native';
 
-  //import SVGPath from "art/modes/svg/path";
-  //import { Tween } from "art/morph/path";
-
+import ChattrUI from "./UI/ChattrUI";
 
 class Login extends Component {
 
@@ -54,15 +52,18 @@ class Login extends Component {
 		return (
 			<View style={styles.container}>
 			
-				<Text>Chattr </Text>
+				<View style={ChattrUI().box}>
+					<Text style={{fontSize: 40, fontStyle: "italic"}}>Chattr </Text>
+				</View>
+				
 				{ 
 					this.state.invalidLogin &&
 					<Text style={{color: "red", marginTop: 10}}>Invalid username and/or password</Text>
 	   			}
-				<TextInput style={styles.input} placeholder="username" value={this.state.username} onChange={this.username}/>
-				<TextInput style={styles.input} placeholder="password" value={this.state.password} onChange={this.password}/>
-				<TouchableOpacity style={styles.button} onPress={this.login} >
-					<Text>Login</Text>
+				<TextInput style={ChattrUI().box} placeholder="username" value={this.state.username} onChange={this.username}/>
+				<TextInput style={ChattrUI().box} placeholder="password" value={this.state.password} onChange={this.password}/>
+				<TouchableOpacity style={ChattrUI().box} onPress={this.login} >
+					<Text style={ChattrUI().text}>Login</Text>
 				</TouchableOpacity>
 				
 				
@@ -74,29 +75,15 @@ class Login extends Component {
   
 
 const styles = StyleSheet.create({
-container: {
-	marginTop: 100,
-	flex: 1,
-	
-	alignItems: 'center',
-	width: "100%",
-	
-},
-input: {
-	//height: 40,
-	borderBottomColor: '#000000',
-	margin: 12,
-	width: "70%",
-	
-	padding: 10,
-	borderBottomWidth: 1,
+	container: {
+
+		flex: 1,
+		
+		alignItems: 'center',
+		width: "100%",
+		
 	},
-button: {
-	alignItems: 'center',
-	backgroundColor: '#DDDDDD',
-	padding: 10,
-	marginBottom: 10
-}
+
 })
   
 

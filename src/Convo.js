@@ -45,21 +45,7 @@ class Convo extends Component {
 		this.props.navigation.navigate('Record', { network: this.getNetwork(), friend: this.getFriend()});
 	}
 
-	/**
-	 * 
-	-0.0028019025921821594 vs -0.0028019025921821594
--0.00274409307166934 vs -0.00274409307166934
--0.0027615525759756565 vs -0.0027615525759756565
--0.0024372157640755177 vs -0.0024372157640755177
--0.0023780905175954103 vs -0.0023780905175954103
--0.0022725441958755255 vs -0.0022725441958755255
--0.001960946246981621 vs -0.001960946246981621
--0.0019725176971405745 vs -0.0019725176971405745
--0.0016332888044416904 vs -0.0016332888044416904
--0.0014650503871962428 vs -0.0014650503871962428
 
-13 frames
-	 */
 
 	play = async (chat) => {
 		//Alert.alert(JSON.stringify(chat))
@@ -92,7 +78,7 @@ class Convo extends Component {
 
 	render() {
 		let msgs = this.getChattrs()
-console.log("msgs",msgs)
+
 		return (
 			<View style={styles.container}>
 				<ScrollView style={styles.scrollView}>
@@ -134,25 +120,20 @@ const styles = StyleSheet.create({
 		
 	},
 	convo: {
-		
-		
-		
-	
 		width: "100%",
 		height: 80,
-		flexDirection: 'row', justifyContent: 'center', alignItems: 'center',
-		//backgroundColor:"red",
+		flexDirection: 'row', 
+		justifyContent: 'center', 
+		alignItems: 'center',
 		textAlignVertical: 'center'
 	},
 	text:{
 		fontSize: 20
 	},
 	input: {
-		//height: 40,
 		borderBottomColor: '#000000',
 		margin: 12,
 		width: "70%",
-		
 		padding: 10,
 		borderBottomWidth: 1,
 	},

@@ -106,7 +106,7 @@ app.post('/play', async (req, res) => {
 				console.log("error", e)
 			}).on("finish",()=>{
 				res.send({"frames":frames})
-				console.log("done")
+				//console.log("done")
 			}))
 			//res.send({"e":"e"});
 		}else{

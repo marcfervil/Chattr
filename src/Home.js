@@ -100,13 +100,11 @@ const styles = StyleSheet.create({
 		
 	},
 	convo: {
-		
-		
-		
-	
 		width: "100%",
 		height: 80,
-		flexDirection: 'row', justifyContent: 'center', alignItems: 'center',
+		flexDirection: 'row', 
+		justifyContent: 'center', 
+		alignItems: 'center',
 		//backgroundColor:"red",
 		textAlignVertical: 'center'
 	},

@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
 
-import App from './App';
+import App from './src/App';
 
 Array.prototype.random = function () {
 	return this[Math.floor((Math.random()*this.length))];
