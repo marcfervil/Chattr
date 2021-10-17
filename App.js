@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Button, Animated } from 'react-native';
 import Login from "./Login";
 import Record from "./Record";
 import Home from "./Home";
+import Convo from "./Convo";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Network from "./network";
@@ -30,8 +31,9 @@ export default function App() {
 					name="Home"
 					component={Home}
 					initialParams={{network}}
-					options={{ title: 'Home' , headerStyle: {
-						backgroundColor: global.getNextColor()
+					options={{ title: 'Friends' , headerStyle: {
+						backgroundColor: global.getNextColor(),
+						headerTintColor: 'black',
 					 }}}
 					
 				/>
@@ -42,6 +44,16 @@ export default function App() {
 					options={{ title: 'Record' }}
 				/>
 
+				<Stack.Screen
+					name="Convo"
+					component={Convo}
+					initialParams={{network}}
+					options={{ title: 'Convo' , headerStyle: {
+						backgroundColor: global.getNextColor(),
+						headerTintColor: 'black',
+					 }}}
+				/>
+
 			</Stack.Navigator>
 		</NavigationContainer>
   	);
@@ -50,6 +62,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+	
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',

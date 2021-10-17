@@ -23,6 +23,7 @@ async function init(){
 	db = client.db("Chattr");
 	chattrs = db.collection('chattrs');
 	users = db.collection('users');
+
 	bucket = new mongodb.GridFSBucket(db);
 }
 
@@ -79,7 +80,12 @@ app.post('/login', async (req, res) => {
 
 });
 
-
+app.post('/convo', async (req, res) => {
+	console.log({from:req.user.username, to:req.body.with})
+	let msgs = await chattrs.find({from:req.user.username, to:req.body.with}).toArray();
+	//console.log(msgs.toArray())
+	res.send({msgs})
+});
 
 app.post('/chattr', async (req, res) => {
 	let to = await getUser(req.body.to);

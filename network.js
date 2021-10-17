@@ -26,6 +26,10 @@ class Network {
 		return await this.request("login", {username, password});
 	}
 
+	async convo(username){
+		return await this.request("convo", {with: username});
+	}
+
 	async chattr(to, data){
 		return await this.request("chattr", {to, data});
 	}

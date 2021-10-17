@@ -9,7 +9,7 @@ Array.prototype.random = function () {
 global.getNextColor=function(prefix="#"){
 
 
-	colors=["9B5DE5","F15BB5", "FEE440", "00BBF9", "00F5D4"]
+	colors=["9B5DE5","F15BB5", "FEE440", "00BBF9", "00F5D4" ]
 
 
 	let newColors = colors.filter(item => item !== this.lastColor);

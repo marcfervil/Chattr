@@ -43,8 +43,14 @@ class Home extends Component {
 		return this.props.route.params.network;
 	}
 
-	openConvo = (friend) => {
-		Alert.alert(friend);
+	openConvo = async (friend) => {
+		let convo = await this.getNetwork().convo(friend)
+		console.log(convo);
+		if(convo.msgs.length > 0){
+			this.props.navigation.navigate('Convo', { network: this.getNetwork(), friend, convo });
+		}else{
+			Alert.alert("You haven't started a convo with this user!")
+		}
 	}
 
 	Conversations = (props)=>{
@@ -59,12 +65,8 @@ class Home extends Component {
 
 		return (
 			<ScrollView style={styles.scrollView}>
-
 				{
-					friends.map((friend, index) => 
-						
-						(
-						
+					friends.map((friend, index) => (
 						<TouchableOpacity
 							key = {friend[1]}
 							style = {[styles.convo, {backgroundColor: global.getNextColor()}]}
