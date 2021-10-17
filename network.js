@@ -15,7 +15,7 @@ class Network {
 			},
 			body: JSON.stringify(data)
 		});
-		console.log(data)
+		
 	
 		result = await result.json();
 		if(result.error && endpoint!="login")Alert.alert(result.error)
@@ -24,6 +24,10 @@ class Network {
 
 	async login(username, password){
 		return await this.request("login", {username, password});
+	}
+
+	async chattr(to, data){
+		return await this.request("chattr", {to, data});
 	}
 
 }

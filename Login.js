@@ -19,7 +19,7 @@ class Login extends Component {
 
 	state = {
 		username: "Marc",
-		password: "123123",
+		password: "password",
 		invalidLogin: false
 	}
 

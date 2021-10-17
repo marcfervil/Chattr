@@ -153,7 +153,7 @@ class AudioStream: RCTEventEmitter {
       let last = chunk as! NSArray != data.lastObject as! NSArray
       self.playerNode.scheduleBuffer(audio, completionHandler: last ? nil : { [self] in
         //playerNode.stop()
-        playerNode.reset()
+        //playerNode.reset()
       });
     }
     
@@ -172,7 +172,10 @@ class AudioStream: RCTEventEmitter {
   @objc func playFromNetwork( audio: AVAudioPCMBuffer) {
     
    
+    //  AudioStream.audioEngine.reset()
+
     
+    //print("RUNITRIN",AudioStream.audioEngine.isRunning)
     let audioBuffer = AVAudioPCMBuffer(
       //pcmFormat: AudioStream.audioEngine.inputNode.outputFormat(forBus: 0),
       pcmFormat: audio.format,
@@ -216,7 +219,7 @@ class AudioStream: RCTEventEmitter {
     AudioStream.audioEngine.inputNode.reset()
     AudioStream.audioEngine.outputNode.reset()
     //AudioStream.audioEngine.pause()
-   
+   // AudioStream.audioEngine.pause()
   
   }
   

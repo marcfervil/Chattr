@@ -21,7 +21,8 @@ import {
 class Record extends Component {
 
 	state = {
-		recording: false
+		recording: false,
+		recorded: false
 	}
 	chunks=[]
 	
@@ -35,23 +36,18 @@ class Record extends Component {
 		this.setState({recording: !this.state.recording});
 		if(!this.state.recording){
 			this.chunks = []
-			//let ff= "few"
-			//console.log("recording")
-			let res = await this.getNetwork().request("me" )
-			Alert.alert(JSON.stringify(res));
-			/*
+			
+			console.log("started recording")
+			
 			AudioStream.stream((data)=>{
 
 				this.chunks.push(data)
 				
-			})*/
+			})
 		}else{
 			console.log("stopped recording")
-			//AudioStream.stop()
-			//AudioStream.AudioStream.playFromNetwork(this.chunks);
-			this.chunks = []
-			//
-		
+			AudioStream.stop()
+			this.setState({recorded: true});
 		}
 
 		
@@ -61,6 +57,31 @@ class Record extends Component {
 		this.setState({username: event.nativeEvent.text});
 	}
 
+	play = (props) => {
+		AudioStream.AudioStream.playFromNetwork(this.chunks);
+	}
+
+	send = (props) => {
+		this.getNetwork().chattr(this.state.username, this.chunks)
+	}
+
+	RecordedControls = (props)=>{
+		if (!props.show) return null;
+		
+	  
+		return (
+			<View style={styles.container}>
+				<TouchableOpacity style={styles.button} onPress={this.play} >
+					<Text>Play</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity style={styles.button} onPress={this.send} >
+					<Text>Send</Text>
+				</TouchableOpacity>
+			</View>
+		);
+	}
+
 	render() {
 		return (
 			<View style={styles.container}>
@@ -68,6 +89,7 @@ class Record extends Component {
 				<TouchableOpacity style={styles.button} onPress={this.record} >
 					<Text>Record</Text>
 				</TouchableOpacity>
+				<this.RecordedControls show={this.state.recorded} />
 			</View>
 		);
 	}
