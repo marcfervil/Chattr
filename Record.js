@@ -22,7 +22,8 @@ class Record extends Component {
 
 	state = {
 		recording: false,
-		recorded: false
+		recorded: false,
+		username: this.props.route.params.friend ? this.props.route.params.friend :  ""
 	}
 	chunks=[]
 	

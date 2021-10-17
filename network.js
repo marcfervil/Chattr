@@ -30,6 +30,10 @@ class Network {
 		return await this.request("convo", {with: username});
 	}
 
+	async play(id){
+		return await this.request("play", {id});
+	}
+
 	async chattr(to, data){
 		return await this.request("chattr", {to, data});
 	}

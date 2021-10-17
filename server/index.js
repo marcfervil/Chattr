@@ -1,7 +1,8 @@
 const express = require('express');
-const { MongoClient } = require("mongodb");
+const { MongoClient,ObjectId } = require("mongodb");
 const mongodb = require("mongodb");
-const { Readable } = require('stream');
+const { Readable, Writable } = require('stream');
+
 
 const app = express();
 const port = 8000;
@@ -80,8 +81,48 @@ app.post('/login', async (req, res) => {
 
 });
 
+app.post('/play', async (req, res) => {
+	let msg = await chattrs.findOne({_id: ObjectId(req.body.id)});
+	if(msg){
+		if(msg.to == req.user.username){
+			let frames = []
+			let frame = []
+			bucket.openDownloadStreamByName(msg.fileName).pipe(new audioStreamReader((chunk)=>{
+				//let cc = new DataView(chunk).getFloat32(1)
+				//console.log(Buffer.from([-6,9]).readFloatLE(0))
+				console.log(chunk.length,chunk.byteLength)
+				for(let i=0; i <chunk.length/4; i++){
+					
+					
+					frame.push(chunk.readFloatBE(i))
+					if(frame.length == 4100){
+						console.log("framed")
+						frames.push(frame)
+						frame = []
+						if(frames.length==12){
+							res.send({"frames":frames})
+						}
+					}
+					
+				}
+
+				//readFloatBE
+				//console.log("chunk", cc)
+			})).on("error",(e)=>{
+				console.log("error", e)
+			}).on("finish",()=>{
+				console.log("done")
+			});
+			//res.send({"e":"e"});
+		}else{
+			res.send({"error": "You don't have permission to open this Chattr!"})
+		}
+	}else{
+		res.send({"error": "This Chattr does not exist!"})
+	}
+});
+
 app.post('/convo', async (req, res) => {
-	console.log({from:req.user.username, to:req.body.with})
 	let msgs = await chattrs.find({from:req.user.username, to:req.body.with}).toArray();
 	//console.log(msgs.toArray())
 	res.send({msgs})
@@ -96,7 +137,7 @@ app.post('/chattr', async (req, res) => {
 
 		let fileName = `${from}-${to}${getId(5)}.pcm`
 
-		await audioStream(req.body.data).pipe(bucket.openUploadStream(fileName)).on("finish",()=>{
+		await audioStreamWriter(req.body.data).pipe(bucket.openUploadStream(fileName)).on("finish",()=>{
 			console.log("uploaded", fileName);
 		}).on('error', function(error) {
 			console.log("ERROR!", error);
@@ -129,19 +170,43 @@ app.listen(port, () => {
 
 
 //UTIL
-function audioStream(audioChunks){
+function audioStreamWriter(audioChunks){
 	async function * generate() {
+	
 		for(chunk of audioChunks){
 			/*
 			for(float32 of chunk){
 				yield float32;
 			}*/
-			yield chunk;
+			let floatChunk = Buffer.alloc(4410 * 32)
+			let num = 0
+			for(float32 of chunk){
+		
+				floatChunk.writeFloatBE(float32,num)
+				num += 1;
+			}
+
+			//console.log(floatChunk.readFloatBE(0))
+			yield floatChunk;
 		}
+		//console.log("completed")
+	}
+	let stream = Readable.from(generate())
+	
+	return stream;
+}
+
+class audioStreamReader extends Writable {
+	constructor(writeCb) {
+		super(null);
+		this.writeCb = writeCb
 		
 	}
-	return Readable.from(generate());
-}
+  
+	_write(chunk, encoding, callback) {
+	  this.writeCb(chunk);
+	}
+  }
 
 
 function getId(length) {

@@ -14,8 +14,9 @@ import {
 	NativeModules,
 	Animated,
   } from 'react-native';
-  import { Buffer } from 'buffer';
   import AudioStream from './AudioStream';
+  import { Buffer } from 'buffer';
+
 
 
 
@@ -36,13 +37,28 @@ class Convo extends Component {
 		return this.props.route.params.network;
 	}
 
-	play = (chat) => {
-		Alert.alert(JSON.stringify(chat))
+	getFriend = () => {
+		return this.props.route.params.friend;
+	}
+
+	newMessage = () => {
+		this.props.navigation.navigate('Record', { network: this.getNetwork(), friend: this.getFriend()});
+	}
+
+	play = async (chat) => {
+		//Alert.alert(JSON.stringify(chat))
+		let data = await this.getNetwork().play(chat._id)
+		AudioStream.stream((data2)=>{
+			AudioStream.stop()
+			AudioStream.AudioStream.playFromNetwork(data.frames);
+		});
+		console.log(data[0])
+		
 	}
 
 	render() {
 		let msgs = this.getChattrs()
-		console.log(msgs,msgs.map)
+
 		return (
 			<View style={styles.container}>
 				<ScrollView style={styles.scrollView}>
@@ -58,7 +74,13 @@ class Convo extends Component {
 						))
 					}
 				</ScrollView>
-
+				<TouchableOpacity
+					
+					style = {[styles.convo, {backgroundColor: global.getNextColor()}]}
+				
+					onPress = {()=>this.newMessage()}>
+					<Text style={styles.text}>Make new message</Text>
+				</TouchableOpacity>
 			</View>
 		);
 	}
