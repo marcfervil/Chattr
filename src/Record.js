@@ -25,46 +25,93 @@ import {
     return this.reduce(function(a,b){return a+b;})/this.length;
 };
 
+Array.prototype.abs = function() {
+    return this.map((a)=>Math.abs(a));
+};
+
+Array.prototype.max = function() {
+	return  this.reduce(function (p, v) {
+		return ( p > v ? p : v );
+	  });
+  };
+
 class WavGraph extends Component {
 
 	wavLengths = []
-	waveDensity = 60;
+	waveDensity = 150;
 	backgroundColor = global.getNextColor();
 
 	constructor(props){
 		super(props);
-	
+
 		for(let i=0; i< this.waveDensity; i++){
 			this.wavLengths.push("100%")
 
 		}
 	}
 
-	graph = (data) => {
-		for(let i=0; i< data.length; i+=this.waveDensity){
-			let samples = []
-			for(let j = i; j<i+(data.length/this.waveDensity); j++){
-				samples.push(data[j])
+	graph = (data, debug=false) => {
+		
+		//looks best for live
+		if(!debug){
+			this.waveDensity = 20;
+			for(let i=0; i< data.length; i+=this.waveDensity){
+				let samples = []
+				for(let j = i; j<i+(data.length/this.waveDensity); j++){
+					samples.push(data[j])
+				}
+				this.wavLengths[i/this.waveDensity]=(Math.abs(samples.avg())*1000 )+"%"
+				if(debug){
+					//console.log(this.wavLengths[i/this.waveDensity]);
+				}
 			}
-			this.wavLengths[i/this.waveDensity]=(Math.abs(samples.avg())*1000 )+"%"
+		}else{
+		
+			this.waveDensity = 85//150;
+			
+			let f = 0; 
+			let totalAvg = data.abs().max();
+			let frac = Math.floor((data.length/this.waveDensity))
+			for(let i=0; i < data.length; i+=frac){
+				let samples = []
+				for(let j = i; j<i+frac; j++){
+					samples.push(data[j])
+				}
+				//console.log(i/this.waveDensity)
+				
+			
+				this.wavLengths[i/frac]=(samples.abs().avg()/totalAvg)*100 +"%"
+				
+				//f+=1;
 		}
-
+	}
+		//console.log(f);
 		this.setState({})
 	}
 
 
 	render() {
 		//if (!this.props.show) return null;
-		
+		let topGraphStyle= {alignItems: 'flex-end'}
+		let bottomGraphStyle= {alignItems: 'flex-start'}
 		return (
 			<View style={[styles.wavGraph, {backgroundColor: this.backgroundColor }]}>
-			
-				{
-					this.wavLengths.map((height, index) => (
-						
-						<View key={index} style={[styles.wavGraphLine, {height} ]}/>
-					))
-				}
+				<View style={[topGraphStyle,styles.wavGraphLineContainer ]}>
+					{
+						this.wavLengths.map((height, index) => (
+							
+							<View key={"top"+index} style={[styles.wavGraphLine, {height} ]}/>
+						))
+					}
+				</View>
+				<View style={[bottomGraphStyle,styles.wavGraphLineContainer ]}>
+					{
+						this.wavLengths.map((height, index) => (
+							
+							<View key={"bottom"+index} style={[styles.wavGraphLine, {height} ]}/>
+						))
+					}
+				</View>
 			
 			</View>
 		)
@@ -105,9 +152,15 @@ class Record extends Component {
 				
 			})
 		}else{
+			
 			console.log("stopped recording")
 			AudioStream.stop()
 			this.setState({recorded: true});
+			let entireRecording = this.chunks.reduce((a,b)=>a.concat(b));
+			this.wavGraph.current.graph(entireRecording,true);
+			
+			//console.log(entireRecording)
+			
 		}
 
 		
@@ -175,15 +228,20 @@ const styles = StyleSheet.create({
 		width: "100%",
 		height: 100,
 		
-		flexDirection:'row'
 		
 	},
+	wavGraphLineContainer: {
+		flexDirection:'row',
+		
+		width: "100%",
+		height:"50%"
+	},
 	wavGraphLine: {
-		width: 5,
+		width: 3,
 		//height: "50%",
 		marginHorizontal: 1,
 		backgroundColor: "black",
-		alignSelf: 'flex-end',
+		//alignSelf: 'flex-end',
 	},
 	input: {
 		//height: 40,
