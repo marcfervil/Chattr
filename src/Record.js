@@ -67,8 +67,8 @@ class WavGraph extends Component {
 			}
 		}else{
 		
-			this.waveDensity = 85//150;
-			
+			this.waveDensity = 110;
+			this.wavLengths=[];
 			let f = 0; 
 			let totalAvg = data.abs().max();
 			let frac = Math.floor((data.length/this.waveDensity))
@@ -77,14 +77,11 @@ class WavGraph extends Component {
 				for(let j = i; j<i+frac; j++){
 					samples.push(data[j])
 				}
-				//console.log(i/this.waveDensity)
-				
-			
-				this.wavLengths[i/frac]=(samples.abs().avg()/totalAvg)*100 +"%"
-				
-				//f+=1;
+				this.wavLengths[i/frac]=((samples.abs().avg()/totalAvg)*100 )+ 3 +"%"
+
+			}
+			console.log(this.wavLengths.length);
 		}
-	}
 		//console.log(f);
 		this.setState({})
 	}
@@ -237,7 +234,7 @@ const styles = StyleSheet.create({
 		height:"50%"
 	},
 	wavGraphLine: {
-		width: 3,
+		width: 2,
 		//height: "50%",
 		marginHorizontal: 1,
 		backgroundColor: "black",
