@@ -17,6 +17,56 @@ import {
   import AudioStream from './AudioStream';
 
 
+  function rand(min, max) { // min and max included 
+	return Math.floor(Math.random() * (max - min + 1) + min)
+  }
+  
+  Array.prototype.avg = function() {
+    return this.reduce(function(a,b){return a+b;})/this.length;
+};
+
+class WavGraph extends Component {
+	constructor(props){
+		super(props);
+		this.wavLengths = []
+		for(let i=0; i< 40; i++){
+			this.wavLengths.push("100%")
+
+		}
+	}
+
+	graph = (data) => {
+		//for()
+		for(let i=0; i< data.length; i+=40){
+			let samples = []
+			for(let j = i; j<i+(data.length/40); j++){
+				samples.push(data[j])
+			}
+			this.wavLengths[i/40]=(Math.abs(samples.avg())*1000 )+"%"
+			//this.wavLengths[i]=rand(0, 100)+"%"
+		}
+
+		this.setState({})
+	}
+
+
+	render() {
+		//if (!this.props.show) return null;
+		
+		return (
+			<View style={[styles.wavGraph, {backgroundColor: global.getNextColor()}]}>
+			
+				{
+					this.wavLengths.map((height, index) => (
+						
+						<View key={index} style={[styles.wavGraphLine, {height} ]}/>
+					))
+				}
+			
+			</View>
+		)
+	}
+}
 
 class Record extends Component {
 
@@ -27,6 +77,12 @@ class Record extends Component {
 	}
 	chunks=[]
 	
+	constructor(props) {
+		super(props);
+		this.wavGraph = React.createRef();
+		
+	}
+
 	getNetwork = () => {
 		return this.props.route.params.network;
 	}
@@ -41,7 +97,7 @@ class Record extends Component {
 			console.log("started recording")
 			
 			AudioStream.stream((data)=>{
-
+				this.wavGraph.current.graph(data);
 				this.chunks.push(data)
 				
 			})
@@ -82,6 +138,7 @@ class Record extends Component {
 			</View>
 		);
 	}
+	//ref={this.textInput}
 
 	render() {
 		return (
@@ -90,12 +147,14 @@ class Record extends Component {
 				<TouchableOpacity style={styles.button} onPress={this.record} >
 					<Text>Record</Text>
 				</TouchableOpacity>
+				<WavGraph show={this.state.recording} ref={this.wavGraph}/>
 				<this.RecordedControls show={this.state.recorded} />
+				
 			</View>
 		);
 	}
 
-
+ 
 }
 
   
@@ -108,6 +167,20 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		width: "100%",
 		
+	},
+	wavGraph: {
+		width: "100%",
+		height: 100,
+		
+		flexDirection:'row'
+		
+	},
+	wavGraphLine: {
+		width: 5,
+		//height: "50%",
+		marginHorizontal: 5,
+		backgroundColor: "black",
+		alignSelf: 'flex-end',
 	},
 	input: {
 		//height: 40,
