@@ -26,24 +26,27 @@ import {
 };
 
 class WavGraph extends Component {
+
+	wavLengths = []
+	waveDensity = 60;
+	backgroundColor = global.getNextColor();
+
 	constructor(props){
 		super(props);
-		this.wavLengths = []
-		for(let i=0; i< 40; i++){
+	
+		for(let i=0; i< this.waveDensity; i++){
 			this.wavLengths.push("100%")
 
 		}
 	}
 
 	graph = (data) => {
-		//for()
-		for(let i=0; i< data.length; i+=40){
+		for(let i=0; i< data.length; i+=this.waveDensity){
 			let samples = []
-			for(let j = i; j<i+(data.length/40); j++){
+			for(let j = i; j<i+(data.length/this.waveDensity); j++){
 				samples.push(data[j])
 			}
-			this.wavLengths[i/40]=(Math.abs(samples.avg())*1000 )+"%"
-			//this.wavLengths[i]=rand(0, 100)+"%"
+			this.wavLengths[i/this.waveDensity]=(Math.abs(samples.avg())*1000 )+"%"
 		}
 
 		this.setState({})
@@ -54,7 +57,7 @@ class WavGraph extends Component {
 		//if (!this.props.show) return null;
 		
 		return (
-			<View style={[styles.wavGraph, {backgroundColor: global.getNextColor()}]}>
+			<View style={[styles.wavGraph, {backgroundColor: this.backgroundColor }]}>
 			
 				{
 					this.wavLengths.map((height, index) => (
@@ -178,7 +181,7 @@ const styles = StyleSheet.create({
 	wavGraphLine: {
 		width: 5,
 		//height: "50%",
-		marginHorizontal: 5,
+		marginHorizontal: 1,
 		backgroundColor: "black",
 		alignSelf: 'flex-end',
 	},
