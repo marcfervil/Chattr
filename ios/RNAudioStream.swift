@@ -78,18 +78,7 @@ class AudioStream: RCTEventEmitter {
       //
     }
  
-   //
-    
-    if #available(iOS 13.0, *) {
-      print(" ")
-      print(" ")
-      print(engine.attachedNodes)
-      print(" ")
-      print(" ")
-    } else {
-      // Fallback on earlier versions
-    }
-   // if first{
+ 
       engine.attach(playerNode)
       
     
@@ -171,14 +160,8 @@ class AudioStream: RCTEventEmitter {
   }
   
   @objc func playFromNetwork( audio: AVAudioPCMBuffer) {
-    
    
-    //  AudioStream.audioEngine.reset()
-
-    
-    //print("RUNITRIN",AudioStream.audioEngine.isRunning)
     let audioBuffer = AVAudioPCMBuffer(
-      //pcmFormat: AudioStream.audioEngine.inputNode.outputFormat(forBus: 0),
       pcmFormat: audio.format,
       frameCapacity: audio.frameCapacity
       
@@ -195,13 +178,9 @@ class AudioStream: RCTEventEmitter {
   @objc func play(){
 
     let engine = AudioStream.audioEngine
-     // AVAudioEngine()
-      //AudioStream.audioEngine
-      
-      
       engine.attach(playerNode)
 
-    engine.connect(playerNode, to: engine.mainMixerNode, format: AudioStream.audioEngine.inputNode.outputFormat(forBus: 0))
+      engine.connect(playerNode, to: engine.mainMixerNode, format: AudioStream.audioEngine.inputNode.outputFormat(forBus: 0))
     
       playerNode.play()
     self.unlocked = true
@@ -219,8 +198,7 @@ class AudioStream: RCTEventEmitter {
     
     AudioStream.audioEngine.inputNode.reset()
     AudioStream.audioEngine.outputNode.reset()
-    //AudioStream.audioEngine.pause()
-   // AudioStream.audioEngine.pause()
+
   
   }
   

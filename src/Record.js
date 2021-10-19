@@ -125,7 +125,7 @@ class Record extends Component {
 				<TouchableOpacity style={styles.button} onPress={this.record} >
 					<Text>Record</Text>
 				</TouchableOpacity>
-				<View style={styles.wavGraphStyle}>
+				<View style={[styles.wavGraphStyle,{backgroundColor: global.getNextColor()}]}>
 					<WavGraph show={this.state.recording} ref={this.wavGraph}/>
 				</View>
 				<this.RecordedControls show={this.state.recorded} />
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
 		marginBottom: 10
 	},
 	wavGraphStyle : {
-		backgroundColor: global.getNextColor(),
+		
 		width: "100%",
 		height: 100,
 		//flex: 1
