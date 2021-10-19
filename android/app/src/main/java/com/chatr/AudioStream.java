@@ -51,7 +51,6 @@ public class AudioStream extends ReactContextBaseJavaModule {
     public void playFromNetwork(ReadableArray chunks) {
 
         final Runnable r = () -> {
-
             int bufsize = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_FLOAT);
 
 
@@ -63,23 +62,25 @@ public class AudioStream extends ReactContextBaseJavaModule {
                     AudioTrack.MODE_STREAM);
             audio.play();
 
+
             for (Object chunkObj : chunks.toArrayList()) {
                 ArrayList<Double> chunk = (ArrayList<Double>) chunkObj;
                 float[] floats = new float[chunk.size()];
                 for (int i = 0; i < chunk.size(); i++) {
                     floats[i] = chunk.get(i).floatValue();
                 }
-
+               // Log.d("perf","chunked written");
                 audio.write(floats, 0, floats.length, WRITE_BLOCKING);
 
             }
         };
-       // r.run();
+
         HandlerThread handlerThread = new HandlerThread("MyHandlerThread");
         handlerThread.start();
         Looper looper = handlerThread.getLooper();
         Handler handler = new Handler(looper);
         handler.post(r);
+        //Log.i("perf","thread posted");
     }
 
     @ReactMethod

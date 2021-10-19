@@ -3,7 +3,7 @@ import React from "react";
 import { Component, setState} from 'react';
 
 import {
-
+	InteractionManager,
 	TouchableOpacity,
 	Text,
 	View,
@@ -102,10 +102,12 @@ class Chattr extends Component {
 		if(!this.data){
 			
 			this.data = await this.props.view.getNetwork().play(this.props.data._id);
-			//Alert.alert("served")
+			
 		}
 
-		AudioStream.AudioStream.playFromNetwork(this.data.frames);
+		InteractionManager.runAfterInteractions(() => {
+			AudioStream.AudioStream.playFromNetwork(this.data.frames);
+		});
 	}
 
 	render(){
