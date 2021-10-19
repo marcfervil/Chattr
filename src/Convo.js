@@ -63,11 +63,9 @@ class Convo extends Component {
 				<ScrollView >
 					{
 						msgs.map((chattrData) => (
-							<View>
 							
 								<Chattr key={chattrData._id}  view = {this} data = {chattrData}/>
-							{/*	<View key={chattrData._id+"ewk"}  style={{padding:5}}><Text>hello</Text></View>*/}
-							</View>
+							
 						))
 					}
 					
@@ -93,7 +91,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		width: "100%",
-		//flexDirection: 'row', 
+		//flexDirection: 'column', 
 	},
 	convo: {
 		width: "100%",

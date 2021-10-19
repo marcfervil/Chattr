@@ -71,7 +71,7 @@ import {
 		let topGraphStyle = {alignItems: 'flex-end'}
 		let bottomGraphStyle = {alignItems: 'flex-start'}
 		return (
-			<View style={[styles.wavGraph, {backgroundColor: this.backgroundColor }]}>
+			<View style={[styles.wavGraph]}>
 				<View style={[topGraphStyle,styles.wavGraphLineContainer ]}>
 					{
 						this.wavLengths.map((height, index) => (
@@ -128,16 +128,22 @@ const styles = StyleSheet.create({
 	},
 	chattr: {
 		width: "100%",
-		height: 80,
-		flexDirection: 'row', 
+		height: 100,
+	//	flexDirection: 'row', 
+		paddingVertical:15,
+		//marginVertical: 5,
+		flex:1,
 		justifyContent: 'center', 
 		alignItems: 'center',
-		textAlignVertical: 'center'
+		textAlignVertical: 'center',
+		overflow: "hidden"
 	},
 	wavGraph: {
 		width: "100%",
-		height: 100,
-		paddingVertical: 20
+		height: "100%"
+		
+		//paddingTop:10,
+		//paddingBottom:10,
 		
 	},
 	wavGraphLineContainer: {
