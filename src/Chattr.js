@@ -95,11 +95,17 @@ import {
 
 class Chattr extends Component {
 
+	data = null
+
 	play = async () => {
 		AudioStream.stream(()=>AudioStream.stop());
-		let data = await this.props.view.getNetwork().play(this.props.data._id)
+		if(!this.data){
+			
+			this.data = await this.props.view.getNetwork().play(this.props.data._id);
+			//Alert.alert("served")
+		}
 
-		AudioStream.AudioStream.playFromNetwork(data.frames);
+		AudioStream.AudioStream.playFromNetwork(this.data.frames);
 	}
 
 	render(){

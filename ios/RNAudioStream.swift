@@ -57,23 +57,15 @@ class AudioStream: RCTEventEmitter {
    
     inputNode.installTap(onBus: bus, bufferSize: 2048, format: inputNode.inputFormat(forBus: bus)) { [self]
       (buffer: AVAudioPCMBuffer!, time: AVAudioTime!) -> Void in
-      if self.unlocked && !playerNode.isPlaying{
-      
-      let nsBuffer : NSMutableArray = NSMutableArray()
-        for i in 0..<Int(buffer.frameCapacity) {
-        
-       // nsBuffer.add(NSNumber(value: (buffer.floatChannelData?.pointee[i])!))
-        nsBuffer.add(buffer.floatChannelData!.pointee[i])
-      }
-      self.sendEvent(withName: "stream", body: nsBuffer)
-       
-      // self.playFromNetwork(audio: buffer)
-        
-        
-       // let f = NSMutableArray()
-         // f.add(nsBuffer)
-       // self.playFromNetwork(nsBuffer)
-      }
+        if self.unlocked && !playerNode.isPlaying{
+          
+          let nsBuffer : NSMutableArray = NSMutableArray()
+          for i in 0..<Int(buffer.frameCapacity) {
+            nsBuffer.add(buffer.floatChannelData!.pointee[i])
+          }
+          self.sendEvent(withName: "stream", body: nsBuffer)
+
+        }
      
       //
     }
@@ -103,6 +95,7 @@ class AudioStream: RCTEventEmitter {
     let audioBuffer = AVAudioPCMBuffer(
       pcmFormat: AudioStream.audioEngine.inputNode.outputFormat(forBus: 0),
       frameCapacity: AVAudioFrameCount(cap)
+    
         //AVAudioFrameCount(2048 * frameCount)
        
     )!
@@ -141,26 +134,17 @@ class AudioStream: RCTEventEmitter {
       }
       let audio = createPCMBuffer(bits, 1)
       let last = chunk as! NSArray != data.lastObject as! NSArray
-      self.playerNode.scheduleBuffer(audio, completionHandler: last ? nil : { [self] in
+      self.playerNode.scheduleBuffer(audio, completionHandler: last ? nil : {
         //playerNode.stop()
         //playerNode.reset()
       });
     }
     
-    /*
-    var bits = [Float32]()
-    
-    for bit in data{
-      bits.append(bit as! Float32)
-      //pcmBufferData.append(bit as! Float32)
-    }
-    let audio = createPCMBuffer(bits)
-    self.playerNode.scheduleBuffer(audio, completionHandler: nil);*/
+
     
   }
   
   @objc func playFromNetwork( audio: AVAudioPCMBuffer) {
-   
     let audioBuffer = AVAudioPCMBuffer(
       pcmFormat: audio.format,
       frameCapacity: audio.frameCapacity
