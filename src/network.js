@@ -34,8 +34,8 @@ class Network {
 		return await this.request("play", {id});
 	}
 
-	async chattr(to, data){
-		return await this.request("chattr", {to, data});
+	async chattr(to, data, wavform){
+		return await this.request("chattr", {to, data, wavform});
 	}
 
 }

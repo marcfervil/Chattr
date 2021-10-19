@@ -6,6 +6,7 @@ import {
 	StyleSheet,
 	TouchableOpacity,
 	Text,
+	SafeAreaView,
 	View,
 	Button,
 	Alert,
@@ -93,7 +94,7 @@ class Home extends Component {
 const styles = StyleSheet.create({
 	container: {
 		
-		flex: 1,
+		
 		
 	
 		width: "100%",

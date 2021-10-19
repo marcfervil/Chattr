@@ -17,10 +17,7 @@ import {
   import AudioStream from './AudioStream';
   import { Buffer } from 'buffer';
 
-
-
-
-
+  import {Chattr} from './Chattr';
 
 
 class Convo extends Component {
@@ -45,23 +42,7 @@ class Convo extends Component {
 		this.props.navigation.navigate('Record', { network: this.getNetwork(), friend: this.getFriend()});
 	}
 
-
-
-	play = async (chat) => {
-		//Alert.alert(JSON.stringify(chat))
-		AudioStream.stream((data2)=>{
-			AudioStream.stop()
-
-		});
-		let data = await this.getNetwork().play(chat._id)
-
-		AudioStream.AudioStream.playFromNetwork(data.frames);
-		
-		
-	}
-
 	componentDidMount() {
-
 		this.focusListener = this.props.navigation.addListener("focus", async () => {    
 			let convo = await this.getNetwork().convo(this.getFriend());
 			this.setState({chattrs: convo.msgs});
@@ -69,9 +50,7 @@ class Convo extends Component {
 	}
 	
 	componentWillUnmount() {
-		//if (this.navigationEventListener) {
 		this.props.navigation.removeListener(this.focusListener)
-	//	}
 	}
 	
 
@@ -81,23 +60,23 @@ class Convo extends Component {
 
 		return (
 			<View style={styles.container}>
-				<ScrollView style={styles.scrollView}>
+				<ScrollView >
 					{
-						msgs.map((msg, index) => (
-							<TouchableOpacity
-								key = {msg._id}
-								style = {[styles.convo, {backgroundColor: global.getNextColor()}]}
+						msgs.map((chattrData) => (
+							<View>
 							
-								onPress = {()=>this.play(msg)}>
-								<Text style={styles.text}>wow</Text>
-							</TouchableOpacity>
+								<Chattr key={chattrData._id}  view = {this} data = {chattrData}/>
+							{/*	<View key={chattrData._id+"ewk"}  style={{padding:5}}><Text>hello</Text></View>*/}
+							</View>
 						))
 					}
+					
+		
 				</ScrollView>
 				<TouchableOpacity
 					
 					style = {[styles.convo, {backgroundColor: global.getNextColor()}]}
-				
+					
 					onPress = {()=>this.newMessage()}>
 					<Text style={styles.text}>Make new message</Text>
 				</TouchableOpacity>
@@ -112,17 +91,15 @@ class Convo extends Component {
 
 const styles = StyleSheet.create({
 	container: {
-		
 		flex: 1,
-		
-	
 		width: "100%",
-		
+		//flexDirection: 'row', 
 	},
 	convo: {
 		width: "100%",
 		height: 80,
 		flexDirection: 'row', 
+		
 		justifyContent: 'center', 
 		alignItems: 'center',
 		textAlignVertical: 'center'

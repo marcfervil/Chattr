@@ -142,6 +142,7 @@ app.post('/chattr', async (req, res) => {
 			"from": from,
 			"to": to,
 			"fileName": fileName,
+			"wavform": req.body.wavform,
 			"type": "chattr",
 			"date": date
 		}

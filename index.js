@@ -21,7 +21,7 @@ import { registerRootComponent } from 'expo';
 
 import App from './src/App';
 
-console.log("FEPOWFKOP")
+
 
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
