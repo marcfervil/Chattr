@@ -107,7 +107,7 @@ class Record extends Component {
 				<TouchableOpacity style={ChattrUI.box()} onPress={this.play} >
 					<Text style={styles.text}>Play</Text>
 				 </TouchableOpacity>
-
+				 <View style={{flex:1 }}></View>
 				<TouchableOpacity style={ChattrUI.box()} onPress={this.send} >
 					<Text style={styles.text}>Send</Text>
 				</TouchableOpacity>
@@ -120,8 +120,9 @@ class Record extends Component {
 
 	render() {
 		ChattrUI.resetBox()
+		let boxColor = ChattrUI.box().backgroundColor;
 		return (
-			<View style={styles.container}>
+			<View style={[styles.container, {backgroundColor:boxColor}]}>
 				<TextInput style={ChattrUI.box()} placeholder="username" value={this.state.username} onChange={this.username}/>
 				
 				<View style={[styles.wavGraphStyle,{backgroundColor: global.getNextColor()}]}>
@@ -130,6 +131,7 @@ class Record extends Component {
 				<TouchableOpacity style={ChattrUI.box()} onPress={this.record} >
 					<Text style={styles.text}>{(this.state.recording)? "Stop Recording" : "Record"}</Text>
 				</TouchableOpacity>
+				
 				<this.RecordedControls show={this.state.recorded} />
 				
 			</View>

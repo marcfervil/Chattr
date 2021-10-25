@@ -11,6 +11,7 @@ import {
 	Button,
 	Alert,
 	ScrollView,
+	RefreshControl,
 	TextInput,
 	NativeModules,
 	Animated,
@@ -36,10 +37,15 @@ function getName(length) {
 class Home extends Component {
 	
 	state = {
-		friends: {}
+		friends: {},
+		refreshing:false
 	}
 	
-	
+	constructor(props){
+		super(props)
+		this.state.friends = this.getNetwork().userData.friends
+	}
+
 	getNetwork = () => {
 		return this.props.route.params.network;
 	}
@@ -51,18 +57,28 @@ class Home extends Component {
 	
 	}
 
-	Conversations = (props)=>{
+	onRefresh = async () => {
+		this.setState({refreshing: true});
+
+		let friends = await this.getNetwork().userData.friends;
 		
-		//colors=["9B5DE5","F15BB5", "FEE440", "00BBF9", "00F5D4"]
-		
-		this.state.friends = this.getNetwork().userData.friends
+		//this.state.friends = friends
+		this.setState({friends, refreshing: false});
+
+	}
+
+
+	Conversations = ()=>{
+	
 		for(let i=0;i<30;i++){
 			this.state.friends[getName(6)]=getName(20)
 		}
+		//Alert.alert(JSON.stringify(this.state.friends))
 		let friends = Object.entries(this.state.friends);
-
+		let refresher = <RefreshControl  refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>;
 		return (
-			<ScrollView style={styles.scrollView}>
+			<ScrollView style={[styles.scrollView,  {backgroundColor: global.getNextColor()}]}
+				refreshControl={refresher}>
 				{
 					friends.map((friend, index) => (
 						<TouchableOpacity
@@ -80,7 +96,7 @@ class Home extends Component {
 
 	render() {
 		return (
-			<View style={styles.container}>
+			<View style={[styles.container, {backgroundColor: global.getNextColor()}]}>
 				<this.Conversations/>
 			</View>
 		);
@@ -94,6 +110,7 @@ class Home extends Component {
 const styles = StyleSheet.create({
 	container: {
 		width: "100%",
+		flex: 1
 	},
 	convo: {
 		width: "100%",
@@ -105,7 +122,8 @@ const styles = StyleSheet.create({
 		textAlignVertical: 'center'
 	},
 	text:{
-		fontSize: 20
+		fontSize: 20,
+		//fontFamily: "Itim",
 	},
 	input: {
 		//height: 40,
@@ -122,7 +140,10 @@ const styles = StyleSheet.create({
 		padding: 10,
 		marginBottom: 10
 	},
-	
+	scrollView:{
+		//backgroundColor: "red",
+		//flex:1
+	}
 })
 
 export default Home

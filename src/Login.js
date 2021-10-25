@@ -71,10 +71,10 @@ class Login extends Component {
 				<View style={styles.container}>
 			
 					<View style={[ChattrUI.box(), styles.coolBox]}>
-						<Text style={{fontSize: 40,marginTop: 100}}>Chattr</Text>
+						<Text style={styles.logo}>Chattr</Text>
 						{ 
-						this.state.invalidLogin &&
-						<Text style={{color: "red", marginTop: 10}}>Invalid username and/or password</Text>
+							this.state.invalidLogin &&
+							<Text style={{color: "red", marginTop: 10}}>Invalid username and/or password</Text>
 						}
 						<TextInput opacity={0.5} style={[ styles.input]} placeholder="username" value={this.state.username} onChange={this.username}/>
 						<TextInput opacity={0.5}  style={[ styles.input]} placeholder="password" value={this.state.password} onChange={this.password}/>
@@ -125,6 +125,12 @@ const styles = StyleSheet.create({
 		
 		padding: 10,
 		borderBottomWidth: 1,
+	},
+	logo:{
+		fontSize: 50,
+		marginTop: 100,
+		//fontFamily: "Itim",
+		fontFamily: "OleoScript-Regular",
 	}
 })
   

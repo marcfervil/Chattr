@@ -27,6 +27,7 @@ class Network {
 	}
 
 	async login(username, password){
+		this.username = username
 		return await this.request("login", {username, password});
 	}
 

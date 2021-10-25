@@ -52,7 +52,12 @@
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleDefault</string>
 	<key>NSMicrophoneUsageDescription</key>
-<string>We need your permission to use the microphone.</string>
+	<string>We need your permission to use the microphone.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Itim-Regular.ttf</string>
+		<string>OleoScript-Bold.ttf</string>
+		<string>OleoScript-Regular.ttf</string>
+	</array>
 </dict>
-
 </plist>

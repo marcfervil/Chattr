@@ -42,7 +42,10 @@ export default function App() {
 					name="Record"
 					component={Record}
 					initialParams={{network}}
-					options={{ title: 'Record' }}
+					options={{ title: 'Record', headerStyle: {
+						backgroundColor: global.getNextColor(),
+						headerTintColor: 'black',
+					 }}}
 				/>
 
 				<Stack.Screen

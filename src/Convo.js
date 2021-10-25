@@ -58,9 +58,9 @@ class Convo extends Component {
 	onRefresh = async () => {
 		//Alert.alert("dd")
 		//console.log("reee")
-		//this.setState({refreshing: true});
+		this.setState({refreshing: true});
 		let convo = await this.getNetwork().convo(this.getFriend());
-		this.setState({chattrs: convo.msgs});
+		this.setState({chattrs: convo.msgs, refreshing: false});
 	}
 
 
@@ -68,14 +68,15 @@ class Convo extends Component {
 		let msgs = this.getChattrs()
 
 		return (
-			<View style={styles.container}>
+			<View style={[styles.container,{backgroundColor: global.getNextColor()}]} >
 				<ScrollView
 					refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>}>
 					{
 						msgs.map((chattrData) => (
-							<Chattr key={chattrData._id}  view = {this} data = {chattrData}/>
+							<Chattr key={chattrData._id} view = {this} data = {chattrData}/>
 						))
 					}
+					
 				</ScrollView>
 				<TouchableOpacity
 					
@@ -97,6 +98,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		width: "100%",
+
 		//flexDirection: 'column', 
 	},
 	convo: {

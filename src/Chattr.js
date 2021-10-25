@@ -110,6 +110,14 @@ class Chattr extends Component {
 		}
 	}
 
+	getUsernameLabel = () => {
+		let sender = this.props.data.from
+		let isSender = (sender == this.props.view.getNetwork().username)
+		let textStyle = { textAlign: (isSender) ? "right" : "left", width:"100%", paddingHorizontal: 20}
+		return <Text style={textStyle}>{sender}</Text>
+		
+	}
+
 	render(){
 		return (
 		
@@ -119,6 +127,8 @@ class Chattr extends Component {
 				key = {this.props.data._id}
 				style = {[styles.chattr, {backgroundColor: global.getNextColor()}]}
 				onPress = {()=>this.play()}>
+				
+				{this.getUsernameLabel()}
 				<WavGraph wavForm = {this.props.data.wavform}/>
 			</TouchableOpacity>
 			
