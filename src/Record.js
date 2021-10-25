@@ -16,6 +16,7 @@ import {
   import { Buffer } from 'buffer';
   import AudioStream from './AudioStream';
   import {WavGraph} from './Chattr';
+  import ChattrUI from "./UI/ChattrUI";
 
 
   function rand(min, max) { // min and max included 
@@ -45,11 +46,14 @@ class Record extends Component {
 		username: this.props.route.params.friend ? this.props.route.params.friend :  ""
 	}
 	chunks=[]
-	
+
+	styles = []
+	styleKey = 0
+
 	constructor(props) {
 		super(props);
 		this.wavGraph = React.createRef();
-		
+		ChattrUI.initBoxSet();
 	}
 
 	getNetwork = () => {
@@ -106,28 +110,32 @@ class Record extends Component {
 	  
 		return (
 			<View style={styles.container}>
-				<TouchableOpacity style={styles.button} onPress={this.play} >
-					<Text>Play</Text>
+				<TouchableOpacity style={ChattrUI.box()} onPress={this.play} >
+					<Text style={styles.text}>Play</Text>
 				 </TouchableOpacity>
 
-				<TouchableOpacity style={styles.button} onPress={this.send} >
-					<Text>Send</Text>
+				<TouchableOpacity style={ChattrUI.box()} onPress={this.send} >
+					<Text style={styles.text}>Send</Text>
 				</TouchableOpacity>
 			</View>
 		);
 	}
 	//ref={this.textInput}
 
+	
+
 	render() {
+		ChattrUI.resetBox()
 		return (
 			<View style={styles.container}>
-				<TextInput style={styles.input} placeholder="username" value={this.state.username} onChange={this.username}/>
-				<TouchableOpacity style={styles.button} onPress={this.record} >
-					<Text>Record</Text>
-				</TouchableOpacity>
+				<TextInput style={ChattrUI.box()} placeholder="username" value={this.state.username} onChange={this.username}/>
+				
 				<View style={[styles.wavGraphStyle,{backgroundColor: global.getNextColor()}]}>
 					<WavGraph show={this.state.recording} ref={this.wavGraph}/>
 				</View>
+				<TouchableOpacity style={ChattrUI.box()} onPress={this.record} >
+					<Text style={styles.text}>{(this.state.recording)? "Stop Recording" : "Record"}</Text>
+				</TouchableOpacity>
 				<this.RecordedControls show={this.state.recorded} />
 				
 			</View>
@@ -139,9 +147,9 @@ class Record extends Component {
 
   
 
-const styles = StyleSheet.create({
+ styles = StyleSheet.create({
 	container: {
-		marginTop: 100,
+		//marginTop: 100,
 		flex: 1,
 		
 		alignItems: 'center',
@@ -169,6 +177,10 @@ const styles = StyleSheet.create({
 		width: "100%",
 		height: 100,
 		//flex: 1
+	},
+	
+	text:{
+		fontSize: 20
 	}
 })
 

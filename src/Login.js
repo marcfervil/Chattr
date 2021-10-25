@@ -21,7 +21,11 @@ class Login extends Component {
 		invalidLogin: false
 	}
 
-	boxStyles = [ChattrUI().box,ChattrUI().box,ChattrUI().box,ChattrUI().box,,ChattrUI().box]
+	constructor(props){
+		super(props);
+		ChattrUI.initBoxSet()
+	}
+
 
 	getNetwork = () => {
 		return this.props.route.params.network;
@@ -50,10 +54,11 @@ class Login extends Component {
 	} 
 
    	render() {
+		ChattrUI.resetBox()
 		return (
 			<View style={styles.container}>
 			
-				<View style={this.boxStyles[0]}>
+				<View style={ChattrUI.box()}>
 					<Text style={{fontSize: 40}}>Chattr </Text>
 				</View>
 				
@@ -61,10 +66,13 @@ class Login extends Component {
 					this.state.invalidLogin &&
 					<Text style={{color: "red", marginTop: 10}}>Invalid username and/or password</Text>
 	   			}
-				<TextInput style={[this.boxStyles[1],styles.input]} placeholder="username" value={this.state.username} onChange={this.username}/>
-				<TextInput style={[this.boxStyles[2],styles.input]} placeholder="password" value={this.state.password} onChange={this.password}/>
-				<TouchableOpacity style={this.boxStyles[3]} onPress={this.login} >
-					<Text style={[this.boxStyles[4],{fontSize: 20}]}>Login</Text>
+				<TextInput style={[ChattrUI.box(), styles.input]} placeholder="username" value={this.state.username} onChange={this.username}/>
+				<TextInput style={[ChattrUI.box(), styles.input]} placeholder="password" value={this.state.password} onChange={this.password}/>
+				<View style={[ChattrUI.box(), {flex:1}]}>
+					<Text>fork</Text>
+				</View>
+				<TouchableOpacity style={ChattrUI.box()} onPress={this.login} >
+					<Text style={[ {fontSize: 20}]}>Login</Text>
 				</TouchableOpacity>
 				
 				

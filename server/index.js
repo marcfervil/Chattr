@@ -108,7 +108,6 @@ app.post('/play', async (req, res) => {
 			}))
 			//res.send({"e":"e"});
 		}else{
-			console.log("fewf")
 			res.send({"error": "You don't have permission to open this Chattr!"})
 		}
 	}else{
@@ -138,7 +137,7 @@ app.post('/chattr', async (req, res) => {
 
 		let fileName = `${from}-${to}${getId(5)}.pcm`
 
-		await audioStreamWriter(req.body.data).pipe(bucket.openUploadStream(fileName)).on("finish",()=>{
+		await audioStreamWriter(req.body.data).pipe(bucket.openUploadStream(fileName)).on("finish", ()=>{
 			console.log("uploaded", fileName);
 		}).on('error', function(error) {
 			console.log("ERROR!", error);

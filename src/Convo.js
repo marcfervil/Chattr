@@ -82,7 +82,7 @@ class Convo extends Component {
 					style = {[styles.convo, {backgroundColor: global.getNextColor()}]}
 					
 					onPress = {()=>this.newMessage()}>
-					<Text style={styles.text}>Make new message</Text>
+					<Text style={styles.text}>Reply</Text>
 				</TouchableOpacity>
 			</View>
 		);
@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
 		width: "70%",
 		padding: 10,
 		borderBottomWidth: 1,
+		
 	},
 	button: {
 		alignItems: 'center',

@@ -73,7 +73,7 @@ import {
 		return (
 			<View style={[styles.wavGraph]}>
 				<View style={[topGraphStyle,styles.wavGraphLineContainer ]}>
-					{
+					{	
 						this.wavLengths.map((height, index) => (
 							<View key={"top"+index} style={[styles.wavGraphLine, {height:height+"%"} ]}/>
 						))
@@ -100,9 +100,7 @@ class Chattr extends Component {
 	play = async () => {
 		AudioStream.stream(()=>AudioStream.stop());
 		if(!this.data){
-			
 			this.data = await this.props.view.getNetwork().play(this.props.data._id);
-			
 		}
 		if(this.data){
 			InteractionManager.runAfterInteractions(() => {

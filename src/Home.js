@@ -63,7 +63,6 @@ class Home extends Component {
 
 		return (
 			<ScrollView style={styles.scrollView}>
-				
 				{
 					friends.map((friend, index) => (
 						<TouchableOpacity
@@ -94,12 +93,7 @@ class Home extends Component {
 
 const styles = StyleSheet.create({
 	container: {
-		
-		
-		
-	
 		width: "100%",
-		
 	},
 	convo: {
 		width: "100%",
@@ -127,7 +121,8 @@ const styles = StyleSheet.create({
 		backgroundColor: '#DDDDDD',
 		padding: 10,
 		marginBottom: 10
-	}
+	},
+	
 })
 
 export default Home
