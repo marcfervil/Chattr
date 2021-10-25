@@ -34,7 +34,7 @@ function getName(length) {
 
 
 class Home extends Component {
-
+	
 	state = {
 		friends: {}
 	}
@@ -63,6 +63,7 @@ class Home extends Component {
 
 		return (
 			<ScrollView style={styles.scrollView}>
+				
 				{
 					friends.map((friend, index) => (
 						<TouchableOpacity

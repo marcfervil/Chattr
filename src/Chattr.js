@@ -34,7 +34,7 @@ import {
 
 	graph = (data, live=false) => {
 		
-		//looks best for live, tbh not 100% why this one looks so good
+		//looks best for live, tbh not 100% sure why this one looks so good
 		if(live){
 			this.waveDensity = 20;
 			for(let i=0; i< data.length; i+=this.waveDensity){
@@ -104,10 +104,11 @@ class Chattr extends Component {
 			this.data = await this.props.view.getNetwork().play(this.props.data._id);
 			
 		}
-
-		InteractionManager.runAfterInteractions(() => {
-			AudioStream.AudioStream.playFromNetwork(this.data.frames);
-		});
+		if(this.data){
+			InteractionManager.runAfterInteractions(() => {
+				AudioStream.AudioStream.playFromNetwork(this.data.frames);
+			});
+		}
 	}
 
 	render(){

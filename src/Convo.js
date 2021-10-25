@@ -9,6 +9,7 @@ import {
 	View,
 	Button,
 	Alert,
+	RefreshControl,
 	ScrollView,
 	TextInput,
 	NativeModules,
@@ -23,7 +24,8 @@ import {
 class Convo extends Component {
 
 	state = {
-		chattrs: this.props.route.params.convo.msgs
+		chattrs: this.props.route.params.convo.msgs,
+		refreshing: false
 	}
 	
 	getChattrs = () => {
@@ -53,6 +55,13 @@ class Convo extends Component {
 		this.props.navigation.removeListener(this.focusListener)
 	}
 	
+	onRefresh = async () => {
+		//Alert.alert("dd")
+		//console.log("reee")
+		//this.setState({refreshing: true});
+		let convo = await this.getNetwork().convo(this.getFriend());
+		this.setState({chattrs: convo.msgs});
+	}
 
 
 	render() {
@@ -60,16 +69,13 @@ class Convo extends Component {
 
 		return (
 			<View style={styles.container}>
-				<ScrollView >
+				<ScrollView
+					refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>}>
 					{
 						msgs.map((chattrData) => (
-							
-								<Chattr key={chattrData._id}  view = {this} data = {chattrData}/>
-							
+							<Chattr key={chattrData._id}  view = {this} data = {chattrData}/>
 						))
 					}
-					
-		
 				</ScrollView>
 				<TouchableOpacity
 					

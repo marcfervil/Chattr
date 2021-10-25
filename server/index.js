@@ -84,7 +84,8 @@ app.post('/login', async (req, res) => {
 app.post('/play', async (req, res) => {
 	let msg = await chattrs.findOne({_id: ObjectId(req.body.id)});
 	if(msg){
-		if(msg.to == req.user.username){
+		
+		if(msg.to == req.user.username || msg.from == req.user.username ){
 			let frames = []
 			let frame = []
 			bucket.openDownloadStreamByName(msg.fileName).pipe(new audioStreamReader((chunk)=>{
@@ -96,12 +97,9 @@ app.post('/play', async (req, res) => {
 						frames.push(frame)
 						frame = []
 						
-					}
-					
+					}		
 				}
 
-				//readFloatBE
-				//console.log("chunk", cc)
 			}).on("error",(e)=>{
 				console.log("error", e)
 			}).on("finish",()=>{
@@ -110,6 +108,7 @@ app.post('/play', async (req, res) => {
 			}))
 			//res.send({"e":"e"});
 		}else{
+			console.log("fewf")
 			res.send({"error": "You don't have permission to open this Chattr!"})
 		}
 	}else{
@@ -118,8 +117,15 @@ app.post('/play', async (req, res) => {
 });
 
 app.post('/convo', async (req, res) => {
-	let msgs = await chattrs.find({from:req.user.username, to:req.body.with}).toArray();
-	//console.log(msgs.toArray())
+	
+	let query = {
+		$or: [
+			{from:req.body.with, to:req.user.username},
+			{from:req.user.username, to:req.body.with}
+		]
+	}
+	let msgs = await chattrs.find(query).toArray();
+	
 	res.send({msgs})
 });
 
@@ -150,10 +156,18 @@ app.post('/chattr', async (req, res) => {
 
 		let friendUpdate =  {
 			"$set": {
+				[`friends.${req.user.username}`]: date
+			}
+		}
+		await users.findOneAndUpdate({"username":req.body.to}, friendUpdate);
+
+
+		friendUpdate =  {
+			"$set": {
 				[`friends.${req.body.to}`]: date
 			}
 		}
-		await users.findOneAndUpdate({"id":req.user.id}, friendUpdate);
+		await users.findOneAndUpdate({"username":req.user.username}, friendUpdate);
 		res.send({"status":"success"});
 	}else{
 		res.send({"error": "This user does not exist!"})
@@ -192,12 +206,11 @@ class audioStreamReader extends Writable {
 	}
   
 	_write(chunk, encoding, next) {
-		//super._write(chunk, encoding, callback)
 	  this.writeCb(chunk);
 	  next()
 	}
 
-	_
+	
   }
 
 

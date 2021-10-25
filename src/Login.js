@@ -38,7 +38,6 @@ class Login extends Component {
 			this.getNetwork().userId = loginResult.id;
 			this.getNetwork().userData = loginResult;
 			this.props.navigation.navigate('Home', { network: this.getNetwork() });
-			//this.props.navigation.popToTop();
 		}
 		
 	}

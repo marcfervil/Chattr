@@ -2,8 +2,8 @@ import { Alert } from "react-native";
 
 
 class Network {
-	//url = "http://localhost:8000";
-	url = "http://10.0.2.2:8000";
+	url = "http://localhost:8000";
+	//url = "http://10.0.2.2:8000";
 	userId = null;
 
 	async request(endpoint, data={}){
@@ -19,7 +19,10 @@ class Network {
 		
 	
 		result = await result.json();
-		if(result.error && endpoint!="login")Alert.alert(result.error)
+		if(result.error && endpoint!="login"){
+			Alert.alert(result.error)
+			return null;
+		}
 		return result;
 	}
 
