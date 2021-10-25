@@ -72,7 +72,6 @@ class Record extends Component {
 			AudioStream.stream((data)=>{
 				this.wavGraph.current.graph(data, true);
 				this.chunks.push(data)
-				
 			})
 		}else{
 			
@@ -81,12 +80,7 @@ class Record extends Component {
 			this.setState({recorded: true});
 			let entireRecording = this.chunks.reduce((a,b)=>a.concat(b));
 			this.wavGraph.current.graph(entireRecording);
-			
-			//console.log(entireRecording)
-			
 		}
-
-		
 	}
 
 	username = (event)=>{
@@ -120,7 +114,7 @@ class Record extends Component {
 			</View>
 		);
 	}
-	//ref={this.textInput}
+	
 
 	
 

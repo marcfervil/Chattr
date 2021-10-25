@@ -43,7 +43,8 @@ import {
 					samples.push(data[j])
 				}
 				this.wavLengths[i/this.waveDensity]=(Math.abs(samples.avg())*1000 )
-				
+				//if(this.wavLengths.length>1000)break
+				//break;
 			}
 		}else{
 		

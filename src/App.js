@@ -25,7 +25,7 @@ export default function App() {
 					component={Login}
 					initialParams={{network}}
 					
-					options={{ title: 'Welcome' }}
+					options={{   tabBarOptions: { safeAreaInset: { top: 'never' } }, headerShown: false}}
 				/>
 				<Stack.Screen
 				

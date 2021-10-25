@@ -6,10 +6,13 @@ import {
 	TouchableOpacity,
 	Text,
 	View,
+	SafeAreaView,
 	Alert,
 	TextInput,
 	Animated,
   } from 'react-native';
+  import {WavGraph} from './Chattr';
+  import AudioStream from './AudioStream';
 
 import ChattrUI from "./UI/ChattrUI";
 
@@ -24,6 +27,12 @@ class Login extends Component {
 	constructor(props){
 		super(props);
 		ChattrUI.initBoxSet()
+		this.wavGraph = React.createRef();
+		AudioStream.stream((data)=>{
+			if(this.wavGraph.current!=null){
+				this.wavGraph.current.graph(data, true);
+			}
+		});
 	}
 
 
@@ -43,8 +52,10 @@ class Login extends Component {
 			this.getNetwork().userData = loginResult;
 			this.props.navigation.navigate('Home', { network: this.getNetwork() });
 		}
-		
+		AudioStream.stop()
 	}
+
+	
 
 	username = (event)=>{
 		this.setState({username: event.nativeEvent.text});
@@ -56,27 +67,30 @@ class Login extends Component {
    	render() {
 		ChattrUI.resetBox()
 		return (
-			<View style={styles.container}>
 			
-				<View style={ChattrUI.box()}>
-					<Text style={{fontSize: 40}}>Chattr </Text>
+				<View style={styles.container}>
+			
+					<View style={[ChattrUI.box(), styles.coolBox]}>
+						<Text style={{fontSize: 40,marginTop: 100}}>Chattr</Text>
+						{ 
+						this.state.invalidLogin &&
+						<Text style={{color: "red", marginTop: 10}}>Invalid username and/or password</Text>
+						}
+						<TextInput opacity={0.5} style={[ styles.input]} placeholder="username" value={this.state.username} onChange={this.username}/>
+						<TextInput opacity={0.5}  style={[ styles.input]} placeholder="password" value={this.state.password} onChange={this.password}/>
+						<View style={styles.wavView}>
+							<View style={{height: 200}} >
+								<WavGraph show={this.state.recording} ref={this.wavGraph}/>
+							</View>
+						</View>
+					</View>
+					<TouchableOpacity style={ChattrUI.box()} onPress={this.login} >
+						<Text style={[ {fontSize: 20}]}>Login</Text>
+					</TouchableOpacity>
+					
+					
 				</View>
-				
-				{ 
-					this.state.invalidLogin &&
-					<Text style={{color: "red", marginTop: 10}}>Invalid username and/or password</Text>
-	   			}
-				<TextInput style={[ChattrUI.box(), styles.input]} placeholder="username" value={this.state.username} onChange={this.username}/>
-				<TextInput style={[ChattrUI.box(), styles.input]} placeholder="password" value={this.state.password} onChange={this.password}/>
-				<View style={[ChattrUI.box(), {flex:1}]}>
-					<Text>fork</Text>
-				</View>
-				<TouchableOpacity style={ChattrUI.box()} onPress={this.login} >
-					<Text style={[ {fontSize: 20}]}>Login</Text>
-				</TouchableOpacity>
-				
-				
-			</View>
+			
 		)
 	}
 }
@@ -92,8 +106,25 @@ const styles = StyleSheet.create({
 		width: "100%",
 		
 	},
+	coolBox:{
+		flex:1, 
+		justifyContent: "flex-start",
+		flexDirection: 'column'
+	},
+	wavView:{
+		
+		//backgroundColor:"red",
+		flex: 1
+	},
 	input:{
-		padding: 5
+		padding: 5,
+		//borderBottomColor: '#00000040',
+		borderBottomColor: '#000000',
+		margin: 12,
+		width: "70%",
+		
+		padding: 10,
+		borderBottomWidth: 1,
 	}
 })
   
